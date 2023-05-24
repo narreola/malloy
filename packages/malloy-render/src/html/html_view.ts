@@ -44,6 +44,7 @@ import {HTMLPointMapRenderer} from './point_map';
 import {HTMLScatterChartRenderer} from './scatter_chart';
 import {HTMLSegmentMapRenderer} from './segment_map';
 import {HTMLShapeMapRenderer} from './shape_map';
+import {HTMLCountryRenderer} from './country_shape_map';
 import {HTMLTableRenderer} from './table';
 import {HTMLTextRenderer} from './text';
 import {HTMLVegaSpecRenderer} from './vega_spec';
@@ -170,6 +171,14 @@ export function makeRenderer(
   const renderDef = getRendererOptions(field, options.dataStyles) || {};
   options.dataStyles[field.name] = renderDef;
 
+  if (renderDef.renderer === 'country') {
+    return new HTMLCountryRenderer(
+      document,
+      styleDefaults,
+      options,
+      renderDef
+    );
+  }
   if (renderDef.renderer === 'shape_map') {
     return new HTMLShapeMapRenderer(
       document,
