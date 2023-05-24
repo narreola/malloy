@@ -34,6 +34,7 @@ export type RenderDef =
   | ({renderer: 'currency'} & CurrencyRenderOptions)
   | ({renderer: 'country'} & CountryRenderOptions)
   | ({renderer: 'image'} & ImageRenderOptions)
+  | ({renderer: 'time'} & TimeRenderOptions)
   | ({renderer: 'json'} & JSONRenderOptions)
   | ({renderer: 'single_value'} & SingleValueRenderOptions)
   | ({renderer: 'list'} & ListRenderOptions)

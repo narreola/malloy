@@ -38,7 +38,6 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
   }
 
   getDataValue(data: DataColumn): string | number | undefined {
-    print('This is a log ' + data);
     if (data.isNumber()) {
       return data.value;
     } else if (data.isString()) {
@@ -157,15 +156,15 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
           titleFontWeight: 500,
           titleColor: 'var(--malloy-title-color, #505050)',
           labelColor: 'var(--malloy-label-color, #000000)',
-          titleFontSize: 50,
+          titleFontSize: 12,
         },
         legend: {
           labelFont: 'var(--malloy-font-family, Roboto)',
           titleFont: 'var(--malloy-font-family, Roboto)',
           titleFontWeight: 500,
           titleColor: 'var(--malloy-title-color, #505050)',
-          labelColor: 'var(--malloy-label-color, #000005)',
-          titleFontSize: 50,
+          labelColor: 'var(--malloy-label-color, #000000)',
+          titleFontSize: 12,
         },
         header: {
           labelFont: 'var(--malloy-font-family, Roboto)',
