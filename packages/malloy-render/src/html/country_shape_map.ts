@@ -23,12 +23,12 @@
 
 import * as lite from 'vega-lite';
 import {DataColumn, Explore, Field} from '@malloydata/malloy';
-import usAtlas from 'us-atlas/states-10m.json';
 import {HTMLChartRenderer} from './chart';
-import {STATE_CODES} from './state_codes';
+import {COUNTRY_CODES} from './country_codes';
 import {formatTitle, getColorScale} from './utils';
+import world from 'world-atlas/countries-110m.json';
 
-export class HTMLShapeMapRenderer extends HTMLChartRenderer {
+export class HTMLCountryRenderer extends HTMLChartRenderer {
   private getRegionField(explore: Explore): Field {
     return explore.intrinsicFields[0];
   }
@@ -38,12 +38,11 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
   }
 
   getDataValue(data: DataColumn): string | number | undefined {
-    print('This is a log ' + data);
     if (data.isNumber()) {
       return data.value;
     } else if (data.isString()) {
       if (data.field === this.getRegionField(data.field.parentExplore)) {
-        const id = STATE_CODES[data.value];
+        const id = COUNTRY_CODES[data.value];
         if (id === undefined) {
           return undefined;
         }
@@ -90,15 +89,12 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
 
     const colorType = colorField ? this.getDataType(colorField) : undefined;
 
-    const colorDef =
-      colorField !== undefined
-        ? {
-            field: colorField.name,
-            type: colorType,
-            axis: {title: formatTitle(this.options, colorField.name)},
-            scale: getColorScale(colorType, false),
-          }
-        : undefined;
+    const colorDef = {
+      field: colorField.name,
+      type: colorType,
+      axis: {title: formatTitle(this.options, colorField.name)},
+      scale: getColorScale(colorType, false),
+    };
 
     const mapped = this.mapData(data).filter(
       row => row[regionField.name] !== undefined
@@ -107,22 +103,24 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
     return {
       ...this.getSize(),
       data: {values: mapped},
-      projection: {
-        type: 'albersUsa',
-      },
+      projection: {type: 'mercator'},
       layer: [
         {
+          data: {sphere: true},
+          mark: {type: 'geoshape', fill: 'aliceblue'},
+        },
+        {
           data: {
-            values: usAtlas,
+            values: world,
             format: {
               type: 'topojson',
-              feature: 'states',
+              feature: 'countries',
             },
           },
           mark: {
             type: 'geoshape',
-            fill: '#efefef',
-            stroke: 'white',
+            fill: 'mintcream',
+            stroke: 'black',
           },
         },
         {
@@ -131,10 +129,10 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
               lookup: regionField.name,
               from: {
                 data: {
-                  values: usAtlas,
+                  values: world,
                   format: {
                     type: 'topojson',
-                    feature: 'states',
+                    feature: 'countries',
                   },
                 },
                 key: 'id',
@@ -149,36 +147,6 @@ export class HTMLShapeMapRenderer extends HTMLChartRenderer {
           },
         },
       ],
-      background: 'transparent',
-      config: {
-        axis: {
-          labelFont: 'var(--malloy-font-family, Roboto)',
-          titleFont: 'var(--malloy-font-family, Roboto)',
-          titleFontWeight: 500,
-          titleColor: 'var(--malloy-title-color, #505050)',
-          labelColor: 'var(--malloy-label-color, #000000)',
-          titleFontSize: 50,
-        },
-        legend: {
-          labelFont: 'var(--malloy-font-family, Roboto)',
-          titleFont: 'var(--malloy-font-family, Roboto)',
-          titleFontWeight: 500,
-          titleColor: 'var(--malloy-title-color, #505050)',
-          labelColor: 'var(--malloy-label-color, #000005)',
-          titleFontSize: 50,
-        },
-        header: {
-          labelFont: 'var(--malloy-font-family, Roboto)',
-          titleFont: 'var(--malloy-font-family, Roboto)',
-          titleFontWeight: 500,
-        },
-        mark: {font: 'var(--malloy-font-family, Roboto)'},
-        title: {
-          font: 'var(--malloy-font-family, Roboto)',
-          subtitleFont: 'var(--malloy-font-family, Roboto)',
-          fontWeight: 500,
-        },
-      },
     };
   }
 }

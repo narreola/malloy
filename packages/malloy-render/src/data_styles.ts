@@ -32,8 +32,8 @@ export type RenderDef =
   | ({renderer: 'dashboard'} & DashboardRenderOptions)
   | ({renderer: 'text'} & TextRenderOptions)
   | ({renderer: 'currency'} & CurrencyRenderOptions)
+  | ({renderer: 'country'} & CountryRenderOptions)
   | ({renderer: 'image'} & ImageRenderOptions)
-  | ({renderer: 'time'} & TimeRenderOptions)
   | ({renderer: 'json'} & JSONRenderOptions)
   | ({renderer: 'single_value'} & SingleValueRenderOptions)
   | ({renderer: 'list'} & ListRenderOptions)
@@ -209,5 +209,14 @@ export interface ShapeMapRenderOptions extends ChartRenderOptions {
     region?: string;
     color?: string;
     shape?: string;
+  };
+}
+
+export interface CountryRenderOptions extends ChartRenderOptions {
+  chart?: {
+    region?: string;
+    color?: string;
+    shape?: string;
+    abc?: string;
   };
 }
